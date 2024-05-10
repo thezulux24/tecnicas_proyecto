@@ -1,0 +1,3 @@
+/Users/macbookprop/Documents/Semestre 5/Tecnicas/tecnicas_proyecto/cmake-build-debug/CMakeFiles/tecnicas_proyecto.dir
+/Users/macbookprop/Documents/Semestre 5/Tecnicas/tecnicas_proyecto/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/macbookprop/Documents/Semestre 5/Tecnicas/tecnicas_proyecto/cmake-build-debug/CMakeFiles/rebuild_cache.dir

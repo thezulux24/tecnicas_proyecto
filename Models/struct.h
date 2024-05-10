@@ -1,0 +1,8 @@
+//
+// Created by MacBook Pro on 10/05/24.
+//
+
+#ifndef TECNICAS_PROYECTO_STRUCT_H
+#define TECNICAS_PROYECTO_STRUCT_H
+
+#endif //TECNICAS_PROYECTO_STRUCT_H
