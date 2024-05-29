@@ -10,6 +10,7 @@ int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano,
     int seleccion;
     printf("imprimiendo descarte\n");
     imprimirListaCartas(pila_descarte);
+
     int flag = 1;
     strcpy(enemigo->personaje.nombre, "Kratos");
     jugador->personaje.ataque = 0;
@@ -28,7 +29,6 @@ int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano,
     if (seleccion == 0) {
         printf("\n ----------------- \n");
         printf("Turno finalizado\n");
-
 
         if (jugador->defensa < enemigo->personaje.ataque){
             printf("Su enemigo le genero %d dano\n", -(jugador->defensa-enemigo->personaje.ataque));
@@ -155,6 +155,7 @@ void barajarListaYApilar(ListaEnlazada* lista, struct Nodo** tope) {
 
     free(nodos);
 }
+
 
 
 void imprimirListaCartas(ListaEnlazada* lista) {
@@ -317,20 +318,22 @@ void vaciarListaDescarte(ListaEnlazada* pila_descarte) {
 
 
 void inicializarCartasDisponibles(Carta* cartas_disponibles) {
-    cartas_disponibles[0] = (Carta){"Ataque", 5, 0, 0, -1};
-    cartas_disponibles[1] = (Carta){"Defensa", 0, 5, 0, -1};
-    cartas_disponibles[2] = (Carta){"Ultima Sangre", 12, 0, -5, -1};
-    cartas_disponibles[3] = (Carta){"Milagro", 0, 0, 0, 1};
-    cartas_disponibles[4] = (Carta){"Resplandor", 15, 0, 0, -2};
-    cartas_disponibles[5] = (Carta){"Desvio", 0, 12, 0, -2};
-    cartas_disponibles[6] = (Carta){"Rebote", 5, 5, 0, -1};
-    cartas_disponibles[7] = (Carta){"Furia", 8, 3, 0, -2};
-    cartas_disponibles[8] = (Carta){"Escudo Divino", 0, 10, 0, -2};
-    cartas_disponibles[9] = (Carta){"Bendicion", 0, 5, 10, -3};
-    cartas_disponibles[10] = (Carta){"Contraataque", 6, 0, 0, -2};
-    cartas_disponibles[11] = (Carta){"Curacion", 0, 0, 20, -3};
-    cartas_disponibles[12] = (Carta){"Fuego Sagrado", 10, 0, 0, -3};
-    cartas_disponibles[13] = (Carta){"Meditacion", 0, 0, 0, 3};
+    FILE* archivo = fopen("../Text/cartas.txt", "r");
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo ../Text/cartas.txt\n");
+        return;
+    }
+
+    char linea[256];
+    int i = 0;
+    while (fgets(linea, sizeof(linea), archivo)) {
+        Carta* carta = &cartas_disponibles[i];
+        carta->nombre = malloc(50 * sizeof(char)); //liberar esta memoria más tarde
+        sscanf(linea, "%[^,],%d,%d,%d,%d", carta->nombre, &carta->ataque, &carta->defensa, &carta->vida, &carta->energia);
+        i++;
+    }
+
+    fclose(archivo);
 }
 void eliminarEspacios(char *str) {
     int len = strlen(str);

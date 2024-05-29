@@ -12,7 +12,7 @@
 #include <time.h>
 #include <string.h>
 
-#define NUM_CARTAS 14
+#define NUM_CARTAS 20
 #define MANO_JUGADOR 5
 #define INICIAL_DECK 7
 

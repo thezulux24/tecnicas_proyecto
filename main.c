@@ -36,7 +36,7 @@ int main() {
             flagTurno = turno(&enemigo, &jugador, mano, &pila_robo, pila_descarte); // Ahora pasamos la dirección de pila_robo
         }
         moverCartasAlFinalizarTurno(mano,pila_descarte);
-        robarCartas(&pila_robo, mano,pila_descarte); // Ahora pasamos la dirección de pila_robo
+        robarCartas(&pila_robo, mano, pila_descarte); // Ahora pasamos la dirección de pila_robo
         vaciarListaDescarte(pila_descarte);
 
         if (jugador.personaje.vida_actual <= 0) {
