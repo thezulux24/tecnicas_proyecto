@@ -21,14 +21,14 @@ int main() {
     seleccionarDeck(cartas_disponibles, deck_general, INICIAL_DECK);
     struct Nodo* pila_robo = NULL; // Cambiado de Pila* a struct Nodo*
     barajarListaYApilar(deck_general, &pila_robo); // Ahora pasamos la dirección de pila_robo
-    printf("Pila de robado:\n");
-    imprimirPila(pila_robo); // No se necesita cambiar, ya que imprimirPila espera un struct Nodo*
 
+    imprimirListaCartas(deck_general);
     ListaEnlazada *pila_descarte = crearListaEnlazada();
     ListaEnlazada *mano = crearListaEnlazada();
     robarCartas2(&pila_robo, mano); // Ahora pasamos la dirección de pila_robo
     printf("Recuerde que, AT=Ataque, DF=Defensa,LF= Efecto en vida  y EN=Costo de energia \n");
     while (flagJuego == 1) {
+
         jugador.defensa = 0;
         jugador.energia = 3;
         enemigo.personaje.ataque = rand() % 8 + 5;

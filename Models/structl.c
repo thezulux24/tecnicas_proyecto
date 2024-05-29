@@ -7,10 +7,7 @@ void apilar(struct Nodo** tope, Carta carta) {
 }
 
 int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano, struct Nodo** pila_robo, ListaEnlazada* pila_descarte) {
-    int seleccion;
-    printf("imprimiendo descarte\n");
-    imprimirListaCartas(pila_descarte);
-
+    char seleccion[10];
     int flag = 1;
     strcpy(enemigo->personaje.nombre, "Kratos");
     jugador->personaje.ataque = 0;
@@ -24,9 +21,10 @@ int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano,
     printf("Las cartas disponibles son: \n");
     imprimirListaCartas(mano);
     printf("Por favor selecciona tu carta, debes marcar el número de la carta o escribir 0 para finalizar el turno\n");
+    printf("O puedes escribir 'd' para descarte y 'r' para robo\n");
     printf("-------------------------------------------------------------------- \n");
-    scanf("%d", &seleccion);
-    if (seleccion == 0) {
+    scanf("%s", seleccion);
+    if (strcmp(seleccion, "0") == 0) {
         printf("\n ----------------- \n");
         printf("Turno finalizado\n");
 
@@ -40,26 +38,37 @@ int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano,
 
         flag = 0;
     }
-    else if (seleccion > mano->longitud) {
-        printf("La carta no está en el mazo.\n");
+    else if (strcmp(seleccion, "d") == 0) {
+        printf("Descarte:\n");
+        imprimirListaCartas(pila_descarte);
     }
-    else if (jugador->energia < -(obtenerCartaEnIndice(mano, seleccion - 1).energia)) {
-        printf("Energía insuficiente.\n");
+    else if (strcmp(seleccion, "r") == 0) {
+        printf("Robo:\n");
+        imprimirPila(*pila_robo);
     }
-    else if ((jugador->energia -(obtenerCartaEnIndice(mano, seleccion - 1).energia)) >= 0) {
-        Carta cartaSeleccionada = obtenerCartaEnIndice(mano, seleccion - 1);
-        jugador->personaje.ataque += cartaSeleccionada.ataque;
-        jugador->defensa += cartaSeleccionada.defensa;
-        jugador->energia += cartaSeleccionada.energia;
-        jugador->personaje.vida_actual += cartaSeleccionada.vida;
-        if (enemigo->personaje.vida_actual > 0) {
-            printf("Has generado %d de daño a tu enemigo\n", jugador->personaje.ataque);
-            enemigo->personaje.vida_actual -= jugador->personaje.ataque;
+    else {
+        int seleccionCarta = atoi(seleccion);
+        if (seleccionCarta > mano->longitud) {
+            printf("La carta no está en el mazo.\n");
         }
-        agregarAlFinal(pila_descarte, cartaSeleccionada);
-        eliminarCartaLista(mano, seleccion - 1);
-    } else {
-        printf("ERROR\n");
+        else if (jugador->energia < -(obtenerCartaEnIndice(mano, seleccionCarta - 1).energia)) {
+            printf("Energía insuficiente.\n");
+        }
+        else if ((jugador->energia -(obtenerCartaEnIndice(mano, seleccionCarta - 1).energia)) >= 0) {
+            Carta cartaSeleccionada = obtenerCartaEnIndice(mano, seleccionCarta - 1);
+            jugador->personaje.ataque += cartaSeleccionada.ataque;
+            jugador->defensa += cartaSeleccionada.defensa;
+            jugador->energia += cartaSeleccionada.energia;
+            jugador->personaje.vida_actual += cartaSeleccionada.vida;
+            if (enemigo->personaje.vida_actual > 0) {
+                printf("Has generado %d de daño a tu enemigo\n", jugador->personaje.ataque);
+                enemigo->personaje.vida_actual -= jugador->personaje.ataque;
+            }
+            agregarAlFinal(pila_descarte, cartaSeleccionada);
+            eliminarCartaLista(mano, seleccionCarta - 1);
+        } else {
+            printf("ERROR\n");
+        }
     }
     return flag;
 }
@@ -112,9 +121,11 @@ Carta desapilar(struct Nodo** tope) {
 // Función para imprimir los elementos de la pila
 void imprimirPila(struct Nodo* tope) {
     printf("Elementos de la pila:\n");
+    int indice = 1;
     while (tope != NULL) {
-        printf("%s ", tope->carta.nombre);
+        printf("[%d] %s (AT: %d, DF: %d, Vida: %d, Energia: %d)\n", indice, tope->carta.nombre, tope->carta.ataque, tope->carta.defensa, tope->carta.vida, tope->carta.energia);
         tope = tope->siguiente;
+        indice++;
     }
     printf("\n");
 }
