@@ -55,8 +55,8 @@ build CMakeFiles/tecnicas_proyecto.dir/main.c.o: C_COMPILER__tecnicas_proyecto_u
   OBJECT_DIR = CMakeFiles/tecnicas_proyecto.dir
   OBJECT_FILE_DIR = CMakeFiles/tecnicas_proyecto.dir
 
-build CMakeFiles/tecnicas_proyecto.dir/Models/struct.c.o: C_COMPILER__tecnicas_proyecto_unscanned_Debug /Users/macbookprop/Documents/Semestre$ 5/Tecnicas/tecnicas_proyecto/Models/struct.c || cmake_object_order_depends_target_tecnicas_proyecto
-  DEP_FILE = CMakeFiles/tecnicas_proyecto.dir/Models/struct.c.o.d
+build CMakeFiles/tecnicas_proyecto.dir/Models/structl.c.o: C_COMPILER__tecnicas_proyecto_unscanned_Debug /Users/macbookprop/Documents/Semestre$ 5/Tecnicas/tecnicas_proyecto/Models/structl.c || cmake_object_order_depends_target_tecnicas_proyecto
+  DEP_FILE = CMakeFiles/tecnicas_proyecto.dir/Models/structl.c.o.d
   FLAGS = -g -std=gnu11 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
   OBJECT_DIR = CMakeFiles/tecnicas_proyecto.dir
   OBJECT_FILE_DIR = CMakeFiles/tecnicas_proyecto.dir/Models
@@ -69,7 +69,7 @@ build CMakeFiles/tecnicas_proyecto.dir/Models/struct.c.o: C_COMPILER__tecnicas_p
 #############################################
 # Link the executable tecnicas_proyecto
 
-build tecnicas_proyecto: C_EXECUTABLE_LINKER__tecnicas_proyecto_Debug CMakeFiles/tecnicas_proyecto.dir/main.c.o CMakeFiles/tecnicas_proyecto.dir/Models/struct.c.o
+build tecnicas_proyecto: C_EXECUTABLE_LINKER__tecnicas_proyecto_Debug CMakeFiles/tecnicas_proyecto.dir/main.c.o CMakeFiles/tecnicas_proyecto.dir/Models/structl.c.o
   FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6
   OBJECT_DIR = CMakeFiles/tecnicas_proyecto.dir
   POST_BUILD = :

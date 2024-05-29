@@ -4,5 +4,6 @@ project(tecnicas_proyecto C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(tecnicas_proyecto main.c
-        Models/struct.c
-        Models/struct.h)
+        Models/structl.c
+        Models/structl.h
+)

@@ -1,0 +1,5 @@
+# ninja log v5
+0	347	1715354275118304972	CMakeFiles/tecnicas_proyecto.dir/Models/structl.c.o	a37381e7be03ff1
+1	133	1715354606695176699	CMakeFiles/tecnicas_proyecto.dir/main.c.o	3215738f2f45c1eb
+134	242	1715354606808784985	tecnicas_proyecto	fcb437203227be68
+1	145	1715955060085120189	build.ninja	12b15c6593034258
