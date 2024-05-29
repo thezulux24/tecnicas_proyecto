@@ -1,8 +1,12 @@
 
 #include "structl.h"
+void apilar(struct Nodo** tope, Carta carta) {
+    struct Nodo* nuevoNodo = crearNodo(carta);
+    nuevoNodo->siguiente = *tope;
+    *tope = nuevoNodo;
+}
 
-
-int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano, Pila* pila_robo, ListaEnlazada* pila_descarte) {
+int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano, struct Nodo** pila_robo, ListaEnlazada* pila_descarte) {
     int seleccion;
     printf("imprimiendo descarte\n");
     imprimirListaCartas(pila_descarte);
@@ -60,13 +64,14 @@ int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano,
     return flag;
 }
 
-
-Nodo* crearNodo(Carta carta) {
-    Nodo* nuevoNodo = (Nodo*)malloc(sizeof(Nodo));
+// Función para crear un nuevo nodo
+struct Nodo* crearNodo(Carta carta) {
+    struct Nodo* nuevoNodo = (struct Nodo*)malloc(sizeof(struct Nodo));
     nuevoNodo->carta = carta;
     nuevoNodo->siguiente = NULL;
     return nuevoNodo;
 }
+
 ListaEnlazada* crearListaEnlazada() {
     ListaEnlazada* lista = (ListaEnlazada*)malloc(sizeof(ListaEnlazada));
     lista->cabeza = NULL;
@@ -89,37 +94,32 @@ void agregarAlFinal(ListaEnlazada* lista, Carta carta) {
 }
 
 
-Pila* inicializarPila(int capacidad) {
-    Pila* pila = (Pila*)malloc(sizeof(Pila));
-    pila->cartas = (Carta*)malloc(capacidad * sizeof(Carta));
-    pila->tope = -1;
-    pila->capacidad = capacidad;
-    return pila;
-}
-// Apilar carta en pila
-void apilar(Pila* pila, Carta carta) {
-    if (pila->tope < pila->capacidad - 1) {
-        pila->tope++;
-        pila->cartas[pila->tope] = carta;
-    } else {
-        printf("La pila está llena.\n");
-    }
-}
-// Desapilar carta de las pilas
-Carta desapilar(Pila* pila) {
-    if (pila->tope >= 0) {
-        Carta carta = pila->cartas[pila->tope];
-        pila->tope--;
-        return carta;
-    } else {
+
+// Función para eliminar un elemento de la parte superior de la pila
+Carta desapilar(struct Nodo** tope) {
+    if (*tope == NULL) {
         printf("La pila está vacía.\n");
-        Carta carta_vacia = {"", 0, 0, 0, 0};
-        return carta_vacia;
+        Carta cartaVacia = {"", 0, 0, 0, 0};
+        return cartaVacia; // Valor sentinela para indicar error
     }
+    struct Nodo* temp = *tope;
+    Carta cartaSacada = temp->carta;
+    *tope = (*tope)->siguiente;
+    free(temp);
+    return cartaSacada;
 }
 
-// Se barajea un array de cartas
-void barajarListaYApilar(ListaEnlazada* lista, Pila* pila_robo) {
+// Función para imprimir los elementos de la pila
+void imprimirPila(struct Nodo* tope) {
+    printf("Elementos de la pila:\n");
+    while (tope != NULL) {
+        printf("%s ", tope->carta.nombre);
+        tope = tope->siguiente;
+    }
+    printf("\n");
+}
+
+void barajarListaYApilar(ListaEnlazada* lista, struct Nodo** tope) {
     srand(time(NULL));
 
     int longitud = lista->longitud;
@@ -150,7 +150,7 @@ void barajarListaYApilar(ListaEnlazada* lista, Pila* pila_robo) {
 
     // Se apilan los nodos en la pila de robo
     for (i = 0; i < longitud; i++) {
-        apilar(pila_robo, nodos[i]->carta);
+        apilar(tope, nodos[i]->carta);
     }
 
     free(nodos);
@@ -187,28 +187,27 @@ void seleccionarDeck(Carta* cartas_disponibles, ListaEnlazada* deck_general, int
     }
 }
 // Roba las cartas de la pila de robo a la mano y si la pila de robo esta vacia baraja la pila de descarte y devuelve las cartas a la pila de robo
-void robarCartas(Pila* pila_robo, ListaEnlazada* mano, ListaEnlazada* pila_descarte) {
-    if (pila_robo->tope == -1) {
+void robarCartas(struct Nodo** pila_robo, ListaEnlazada* mano, ListaEnlazada* pila_descarte) {
+    if (*pila_robo == NULL) {
         barajarListaYApilar(pila_descarte, pila_robo);
-
     }
 
-    while (mano->longitud < MANO_JUGADOR && pila_robo->tope >= 0) {
+    while (mano->longitud < MANO_JUGADOR && *pila_robo != NULL) {
         Carta carta = desapilar(pila_robo);
         agregarAlFinal(mano, carta);
     }
 
-    while (mano->longitud < MANO_JUGADOR && pila_robo->tope == -1 && pila_descarte->cabeza != NULL) {
+    while (mano->longitud < MANO_JUGADOR && *pila_robo == NULL && pila_descarte->cabeza != NULL) {
         barajarListaYApilar(pila_descarte, pila_robo);
 
-        while (mano->longitud < MANO_JUGADOR && pila_robo->tope >= 0) {
+        while (mano->longitud < MANO_JUGADOR && *pila_robo != NULL) {
             Carta carta = desapilar(pila_robo);
             agregarAlFinal(mano, carta);
         }
     }
 }
 // funcion vieja que no se uso al final
-void robarCartas2(Pila* pila_robo, ListaEnlazada* mano) {
+void robarCartas2(struct Nodo** pila_robo, ListaEnlazada* mano) {
     while (mano->cabeza != NULL) {
         Nodo* temp = mano->cabeza;
         mano->cabeza = mano->cabeza->siguiente;
@@ -216,7 +215,7 @@ void robarCartas2(Pila* pila_robo, ListaEnlazada* mano) {
     }
     mano->longitud = 0;
 
-    while (mano->longitud < 5 && pila_robo->tope >= 0) {
+    while (mano->longitud < 5 && *pila_robo != NULL) {
         Carta carta = desapilar(pila_robo);
         agregarAlFinal(mano, carta);
     }
@@ -224,18 +223,7 @@ void robarCartas2(Pila* pila_robo, ListaEnlazada* mano) {
 
 
 
-void imprimirPila(Pila* pila) {
-    if (pila->tope == -1) {
-        printf("La pila está vacía.\n");
-    } else {
-        for (int i = pila->tope; i >= 0; i--) {
-            printf("%s (AT: %d, DF: %d, Vida: %d, Energia: %d)\n",
-                   pila->cartas[i].nombre, pila->cartas[i].ataque,
-                   pila->cartas[i].defensa, pila->cartas[i].vida,
-                   pila->cartas[i].energia);
-        }
-    }
-}
+
 // Escoge las 3 cartas a elejir al final de la pelea si el jugador gana
 Carta* seleccionarTresCartasAleatorias(Carta* cartas_disponibles, ListaEnlazada* deck_general) {
     static Carta cartas_seleccionadas[3];
@@ -315,22 +303,17 @@ void moverCartasAlFinalizarTurno(ListaEnlazada* mano, ListaEnlazada* pila_descar
     mano->longitud = 0;
 }
 // Vacia la pila de descarte cuando se requiera
+
 void vaciarListaDescarte(ListaEnlazada* pila_descarte) {
-    Pila* temp_pila = inicializarPila(pila_descarte->longitud);
     Nodo* actual = pila_descarte->cabeza;
     while (actual != NULL) {
-        apilar(temp_pila, actual->carta);
         Nodo* temp = actual;
         actual = actual->siguiente;
         free(temp);
     }
     pila_descarte->cabeza = NULL;
     pila_descarte->longitud = 0;
-
-    free(temp_pila->cartas);
-    free(temp_pila);
 }
-
 
 
 void inicializarCartasDisponibles(Carta* cartas_disponibles) {
