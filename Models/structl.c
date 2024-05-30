@@ -76,10 +76,10 @@ void eventoDescanso(ListaEnlazada* deck_general,  Carta* cartas_disponibles, str
 	printf("Estas en la zona del descanso, que deseas hacer, recuerda que solo elejir una opcion\n");
 	printf("Para recuperar tu vida (%d) elije 1, para obtener una nueva carta elije 2\n ", jugador->personaje.vida_actual);
 	scanf("%d", &eleccion);
-	if (eleccion == 1 && jugador->personaje.vida_actual<50){
-		jugador->personaje.vida_actual +=15;
+	if (eleccion == 1 && jugador->personaje.vida_actual<jugador->personaje.vida_total){
+		jugador->personaje.vida_actual +=20;
 		if (jugador->personaje.vida_actual>jugador->personaje.vida_total){
-			jugador->personaje.vida_actual = 50;
+			jugador->personaje.vida_actual = jugador->personaje.vida_total;
 		}
 		printf("Se ha regenerado tu vida, ahora tienes %d puntos de vida\n Sigue adelante guerrero\n", jugador->personaje.vida_actual);
 	} else if(eleccion == 2){
@@ -107,22 +107,22 @@ void eventoTienda(Carta* cartas_disponibles, ListaEnlazada* deck_general, struct
 					cartasTienda[i].precio);
 		}
 		printf("Que desea comprar?\n");
+        printf("para salir ingrese un numero diferente\n");
 		scanf("%d", &compraSeleccion);
-		if (compraSeleccion>3){
+		if (compraSeleccion > 3 || compraSeleccion < 1){
 			printf("Gracias por pasar, vuelva pronto\n");
 			seguirCompra = 0;
 		}
 		else{
 			if (jugador->oro>=cartasTienda[compraSeleccion-1].precio){
 				agregarAlFinal(deck_general, cartasTienda[compraSeleccion-1]);
-				printf("%d\n", cartasTienda[0]);
 				printf("Se ha comprado %s\n", cartasTienda[compraSeleccion-1].nombre);
 				jugador->oro -= cartasTienda[compraSeleccion-1].precio;
 			}
 			else{
 			printf("No tienes suficiente dinero para esta carta\n");
 			}
-			printf("Deseas seguir comprando? Si(1) No(0)\n");
+			printf("Deseas seguir comprando? Si(1) No(cualquier numero)\n");
 			scanf("%d", &seguirCompra);
 			if (seguirCompra!=1){
 			printf("Gracias por su compra vuelva pronto, le quedan %d oro\n", jugador->oro);
@@ -399,19 +399,14 @@ void inicializarCartasDisponibles(Carta* cartas_disponibles) {
     while (fgets(linea, sizeof(linea), archivo)) {
         Carta* carta = &cartas_disponibles[i];
         carta->nombre = malloc(50 * sizeof(char)); //liberar esta memoria más tarde
-        sscanf(linea, "%[^,],%d,%d,%d,%d", carta->nombre, &carta->ataque, &carta->defensa, &carta->vida, &carta->energia);
+        sscanf(linea, "%[^,],%d,%d,%d,%d,%d", carta->nombre, &carta->ataque, &carta->defensa, &carta->vida, &carta->energia, &carta->precio);
         i++;
     }
 
     fclose(archivo);
 }
-void eliminarEspacios(char *str) {
-    int len = strlen(str);
-    while (len > 0 && (str[len - 1] == ' ' || str[len - 1] == '\n' || str[len - 1] == '\r')) {
-        str[len - 1] = '\0';
-        len--;
-    }
-}
+
+
 
 void eliminarCartaLista(ListaEnlazada* lista, int indice) {
     int eliminado = 0;
@@ -442,9 +437,9 @@ void eliminarCartaLista(ListaEnlazada* lista, int indice) {
     }
 }
 Nivel* leerNiveles() {
-    FILE* archivo = fopen("../Text/cartas.txt", "r");
+    FILE* archivo = fopen("../Text/niveles.txt", "r"); // Cambia la ruta del archivo a la ruta del archivo de niveles
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s\n","../Text/cartas.txt");
+        printf("No se pudo abrir el archivo %s\n","../Text/niveles.txt");
         return NULL;
     }
 

@@ -80,7 +80,6 @@ Carta obtenerCartaEnIndice(ListaEnlazada* lista, int indice);
 void moverCartasAlFinalizarTurno(ListaEnlazada* mano, ListaEnlazada* pila_descarte);
 int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano, struct Nodo** tope, ListaEnlazada* pila_descarte);
 void inicializarCartasDisponibles(Carta* cartas_disponibles);
-void eliminarEspacios(char *str);
 void eliminarCartaLista(ListaEnlazada* lista, int indice);
 void robarCartas2(struct Nodo** tope, ListaEnlazada* mano);
 void vaciarListaDescarte(ListaEnlazada* pila_descarte);

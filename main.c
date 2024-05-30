@@ -11,11 +11,13 @@ int main() {
     Jugador jugador;
     Enemigo enemigo;
     jugador.personaje.vida_actual = 50;
-    jugador.personaje.vida_total = 50;
-    enemigo.personaje.vida_actual = 20;
-    enemigo.personaje.vida_total = 20;
+    jugador.personaje.vida_total = 150;
+    jugador.oro = 10;
+    jugador.nivel = 1;
+    //enemigo.personaje.vida_actual = 20;
+    //enemigo.personaje.vida_total = 20;
 
-    strcpy(enemigo.personaje.nombre, "Kratos");
+    //strcpy(enemigo.personaje.nombre, "Kratos");
     printf("Ingresa el nombre del jugador: ");
     fgets(jugador.personaje.nombre, sizeof(jugador.personaje.nombre), stdin);
     ListaEnlazada *deck_general = crearListaEnlazada();
@@ -23,44 +25,75 @@ int main() {
     struct Nodo* pila_robo = NULL; // Cambiado de Pila* a struct Nodo*
     barajarListaYApilar(deck_general, &pila_robo); // Ahora pasamos la dirección de pila_robo
 
-    imprimirListaCartas(deck_general);
+
     ListaEnlazada *pila_descarte = crearListaEnlazada();
     ListaEnlazada *mano = crearListaEnlazada();
     Nivel* niveles = leerNiveles();
     Nivel* nivel_actual = niveles;
+    int nuevo_enemigo = 1;
 
     robarCartas2(&pila_robo, mano); // Ahora pasamos la dirección de pila_robo
+
     printf("Recuerde que, AT=Ataque, DF=Defensa,LF= Efecto en vida  y EN=Costo de energia \n");
-    while (flagJuego == 1) {
 
-        jugador.defensa = 0;
-        jugador.energia = 3;
-        enemigo.personaje.ataque = rand() % 8 + 5;
-        while (flagTurno == 1 && enemigo.personaje.vida_actual>0) {
-            flagTurno = turno(&enemigo, &jugador, mano, &pila_robo, pila_descarte); // Ahora pasamos la dirección de pila_robo
-        }
-        moverCartasAlFinalizarTurno(mano,pila_descarte);
-        robarCartas(&pila_robo, mano, pila_descarte); // Ahora pasamos la dirección de pila_robo
-        vaciarListaDescarte(pila_descarte);
-
-        if (jugador.personaje.vida_actual <= 0) {
-            printf("HAS PERDIDO\n");
-            flagJuego = 0;
-        }
-        else if (enemigo.personaje.vida_actual <= 0){
-            printf("HAS  GANADO, SELECIONA UNA DE LAS 3 CARTAS\n");
-            Carta *cartas3 = seleccionarTresCartasAleatorias(cartas_disponibles, deck_general);
-            printf("Cartas a seleccionar:\n");
-            for (int i = 0; i < 3; i++) {
-                printf("%s (AT: %d, DF: %d, Vida: %d, Energia: %d)\n", cartas3[i].nombre,
-                       cartas3[i].ataque, cartas3[i].defensa,
-                       cartas3[i].vida, cartas3[i].energia);
+    while (flagJuego == 1 && nivel_actual != NULL) {
+        printf("imprimiendo Deck general para el nivel\n");
+        imprimirListaCartas(deck_general);
+        printf("su oro es: %d\n", jugador.oro);
+        printf("El nivel %d: %s\n", jugador.nivel, nivel_actual->tipo);
+        if (strcmp(nivel_actual->tipo, "combate") == 0) {
+            if (nuevo_enemigo) {
+                enemigo = nivel_actual->enemigo;
+                nuevo_enemigo = 0; // Establecer el indicador en 0 para no crear un nuevo enemigo en el próximo turno
             }
-            scanf("%d", &seleccionCarta);
-            agregarAlFinal(deck_general, cartas3[seleccionCarta-1]);
-            printf("Se ha agregado %s al deck\n", cartas3[seleccionCarta-1].nombre);
-            flagJuego = 0;
+            jugador.defensa = 0;
+            jugador.energia = 3;
+            enemigo.personaje.ataque = rand() % 8 + 5;
+            while (flagTurno == 1 && enemigo.personaje.vida_actual>0) {
+                flagTurno = turno(&enemigo, &jugador, mano, &pila_robo, pila_descarte); // Ahora pasamos la dirección de pila_robo
+            }
+            moverCartasAlFinalizarTurno(mano,pila_descarte);
+            robarCartas(&pila_robo, mano, pila_descarte); // Ahora pasamos la dirección de pila_robo
+            vaciarListaDescarte(pila_descarte);
+
+            if (jugador.personaje.vida_actual <= 0) {
+                printf("HAS PERDIDO\n");
+                flagJuego = 0;
+            }
+            else if (enemigo.personaje.vida_actual <= 0){
+                printf("HAS  GANADO, SELECIONA UNA DE LAS 3 CARTAS\n");
+                Carta *cartas3 = seleccionarTresCartasAleatorias(cartas_disponibles, deck_general);
+                printf("Cartas a seleccionar:\n");
+                for (int i = 0; i < 3; i++) {
+                    printf("%s (AT: %d, DF: %d, Vida: %d, Energia: %d)\n", cartas3[i].nombre,
+                           cartas3[i].ataque, cartas3[i].defensa,
+                           cartas3[i].vida, cartas3[i].energia);
+                }
+                scanf("%d", &seleccionCarta);
+                agregarAlFinal(deck_general, cartas3[seleccionCarta-1]);
+                printf("Se ha agregado %s al deck\n", cartas3[seleccionCarta-1].nombre);
+                jugador.nivel++;
+                nivel_actual = nivel_actual->siguiente;
+                nuevo_enemigo = 1;
+            }
+
         }
+        else if (strcmp(nivel_actual->tipo, "descanso") == 0) {
+            // Si el nivel es de descanso, llamar a la función eventoDescanso
+            eventoDescanso(deck_general, cartas_disponibles, &jugador);
+            nivel_actual = nivel_actual->siguiente;
+            jugador.nivel++;
+        }
+
+        else if (strcmp(nivel_actual->tipo, "tienda") == 0) {
+            // Si el nivel es de tienda, llamar a la función eventoTienda
+            eventoTienda(cartas_disponibles, deck_general, &jugador);
+            nivel_actual = nivel_actual->siguiente;
+            jugador.nivel++;
+
+        }
+
+
         flagTurno= 1;
     }
     free(deck_general);
