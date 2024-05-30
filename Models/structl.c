@@ -53,7 +53,7 @@ int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano,
         else if (jugador->energia < -(obtenerCartaEnIndice(mano, seleccionCarta - 1).energia)) {
             printf("Energía insuficiente.\n");
         }
-        else if ((jugador->energia -(obtenerCartaEnIndice(mano, seleccionCarta - 1).energia)) >= 0) {
+        else {
             Carta cartaSeleccionada = obtenerCartaEnIndice(mano, seleccionCarta - 1);
             jugador->personaje.ataque += cartaSeleccionada.ataque;
             jugador->defensa += cartaSeleccionada.defensa;
@@ -65,8 +65,6 @@ int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano,
             }
             agregarAlFinal(pila_descarte, cartaSeleccionada);
             eliminarCartaLista(mano, seleccionCarta - 1);
-        } else {
-            printf("ERROR\n");
         }
     }
     return flag;
