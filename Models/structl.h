@@ -46,6 +46,7 @@ typedef struct Jugador {
     Personaje personaje;
     int energia;
     int defensa;
+    int oro;
 } Jugador;
 
 typedef struct Enemigo {
@@ -75,5 +76,7 @@ void eliminarEspacios(char *str);
 void eliminarCartaLista(ListaEnlazada* lista, int indice);
 void robarCartas2(struct Nodo** tope, ListaEnlazada* mano);
 void vaciarListaDescarte(ListaEnlazada* pila_descarte);
+void eventoTienda(Carta* cartas_disponibles, ListaEnlazada* deck_general, struct Jugador* jugador);
+void eventoDescanso(ListaEnlazada* deck_general, Carta* cartas_disponibles, struct Jugador* jugador);
 
 #endif // TECNICAS_PROYECTO_STRUCTL_H
