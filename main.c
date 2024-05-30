@@ -10,14 +10,12 @@ int main() {
 
     Jugador jugador;
     Enemigo enemigo;
+
     jugador.personaje.vida_actual = 50;
     jugador.personaje.vida_total = 150;
     jugador.oro = 10;
     jugador.nivel = 1;
-    //enemigo.personaje.vida_actual = 20;
-    //enemigo.personaje.vida_total = 20;
 
-    //strcpy(enemigo.personaje.nombre, "Kratos");
     printf("Ingresa el nombre del jugador: ");
     fgets(jugador.personaje.nombre, sizeof(jugador.personaje.nombre), stdin);
     ListaEnlazada *deck_general = crearListaEnlazada();
@@ -37,8 +35,11 @@ int main() {
     printf("Recuerde que, AT=Ataque, DF=Defensa,LF= Efecto en vida  y EN=Costo de energia \n");
 
     while (flagJuego == 1 && nivel_actual != NULL) {
+        printf("-------------------------------------------------------------------- \n");
         printf("imprimiendo Deck general para el nivel\n");
         imprimirListaCartas(deck_general);
+        printf("-------------------------------------------------------------------- \n");
+
         printf("su oro es: %d\n", jugador.oro);
         printf("El nivel %d: %s\n", jugador.nivel, nivel_actual->tipo);
         if (strcmp(nivel_actual->tipo, "combate") == 0) {
