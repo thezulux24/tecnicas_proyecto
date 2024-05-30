@@ -1,0 +1,10 @@
+combate,Kratos,100
+descanso
+tienda
+combate,Zeus,200
+descanso
+tienda
+combate,Ares,150
+descanso
+tienda
+combate,Hades,250

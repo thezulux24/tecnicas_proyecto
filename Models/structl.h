@@ -48,16 +48,23 @@ typedef struct Jugador {
     int energia;
     int defensa;
     int oro;
+    int nivel;
 } Jugador;
 
 typedef struct Enemigo {
     Personaje personaje;
 } Enemigo;
 
+typedef struct Nivel {
+    char tipo[10];
+    Enemigo enemigo;
+    struct Nivel* siguiente;
+} Nivel;
 
 
 
 // Prototipos de funciones
+Nivel* leerNiveles();
 void imprimirPila(struct Nodo* tope);
 Nodo* crearNodo(Carta carta);
 ListaEnlazada* crearListaEnlazada();

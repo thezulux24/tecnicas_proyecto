@@ -9,9 +9,8 @@ void apilar(struct Nodo** tope, Carta carta) {
 int turno(struct Enemigo* enemigo, struct Jugador* jugador, ListaEnlazada* mano, struct Nodo** pila_robo, ListaEnlazada* pila_descarte) {
     char seleccion[10];
     int flag = 1;
-    strcpy(enemigo->personaje.nombre, "Kratos");
+
     jugador->personaje.ataque = 0;
-    eliminarEspacios(jugador->personaje.nombre);
     printf("Hola %s, tu vida es %d/%d\n", jugador->personaje.nombre, jugador->personaje.vida_actual, jugador->personaje.vida_total);
     printf("su energia es: %d\n", jugador->energia);
     printf("su defensa es: %d\n", jugador->defensa);
@@ -441,4 +440,36 @@ void eliminarCartaLista(ListaEnlazada* lista, int indice) {
             free(actual);
         }
     }
+}
+Nivel* leerNiveles() {
+    FILE* archivo = fopen("../Text/cartas.txt", "r");
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo %s\n","../Text/cartas.txt");
+        return NULL;
+    }
+
+    Nivel* cabeza = NULL;
+    Nivel* cola = NULL;
+    char linea[256];
+    while (fgets(linea, sizeof(linea), archivo)) {
+        Nivel* nivel = malloc(sizeof(Nivel));
+        if (strstr(linea, "combate") != NULL) {
+            sscanf(linea, "%[^,],%[^,],%d", nivel->tipo, nivel->enemigo.personaje.nombre, &nivel->enemigo.personaje.vida_total);
+            nivel->enemigo.personaje.vida_actual = nivel->enemigo.personaje.vida_total;
+        } else {
+            sscanf(linea, "%s", nivel->tipo);
+        }
+        nivel->siguiente = NULL;
+
+        if (cabeza == NULL) {
+            cabeza = nivel;
+            cola = nivel;
+        } else {
+            cola->siguiente = nivel;
+            cola = nivel;
+        }
+    }
+
+    fclose(archivo);
+    return cabeza;
 }

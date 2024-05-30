@@ -15,6 +15,7 @@ int main() {
     enemigo.personaje.vida_actual = 20;
     enemigo.personaje.vida_total = 20;
 
+    strcpy(enemigo.personaje.nombre, "Kratos");
     printf("Ingresa el nombre del jugador: ");
     fgets(jugador.personaje.nombre, sizeof(jugador.personaje.nombre), stdin);
     ListaEnlazada *deck_general = crearListaEnlazada();
@@ -25,6 +26,9 @@ int main() {
     imprimirListaCartas(deck_general);
     ListaEnlazada *pila_descarte = crearListaEnlazada();
     ListaEnlazada *mano = crearListaEnlazada();
+    Nivel* niveles = leerNiveles();
+    Nivel* nivel_actual = niveles;
+
     robarCartas2(&pila_robo, mano); // Ahora pasamos la dirección de pila_robo
     printf("Recuerde que, AT=Ataque, DF=Defensa,LF= Efecto en vida  y EN=Costo de energia \n");
     while (flagJuego == 1) {
