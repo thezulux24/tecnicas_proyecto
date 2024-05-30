@@ -64,7 +64,7 @@ typedef struct Nivel {
 
 
 // Prototipos de funciones
-Nivel* leerNiveles();
+Nivel* leerNiveles(const char* nombreArchivo);
 void imprimirPila(struct Nodo* tope);
 Nodo* crearNodo(Carta carta);
 ListaEnlazada* crearListaEnlazada();

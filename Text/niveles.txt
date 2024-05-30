@@ -1,4 +1,4 @@
-combate,Kratos,5
+combate,Kratos,45
 descanso
 combate,Poseidon,70
 tienda

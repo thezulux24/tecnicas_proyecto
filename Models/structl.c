@@ -434,10 +434,10 @@ void eliminarCartaLista(ListaEnlazada* lista, int indice) {
         }
     }
 }
-Nivel* leerNiveles() {
-    FILE* archivo = fopen("../Text/niveles.txt", "r"); // Cambia la ruta del archivo a la ruta del archivo de niveles
+Nivel* leerNiveles(const char* nombreArchivo) {
+    FILE* archivo = fopen(nombreArchivo, "r"); // Cambia la ruta del archivo a la ruta del archivo de niveles
     if (archivo == NULL) {
-        printf("No se pudo abrir el archivo %s\n","../Text/niveles.txt");
+        printf("No se pudo abrir el archivo %s\n",nombreArchivo);
         return NULL;
     }
 

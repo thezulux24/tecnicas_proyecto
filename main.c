@@ -15,9 +15,35 @@ int main() {
     jugador.personaje.vida_total = 150;
     jugador.oro = 10;
     jugador.nivel = 1;
-
+    printf("\n");
+    printf("************************************\n");
+    printf("*                                  *\n");
+    printf("*   Bienvenido a Battle of Codes!  *\n");
+    printf("*                                  *\n");
+    printf("************************************\n");
+    printf("\n");
     printf("Ingresa el nombre del jugador: ");
     fgets(jugador.personaje.nombre, sizeof(jugador.personaje.nombre), stdin);
+
+    int dificultad;
+    printf("Hola, %s. Por favor, selecciona la dificultad del juego (1: facil, 2: medio, 3: dificil): ", jugador.personaje.nombre);    scanf("%d", &dificultad);
+    Nivel* niveles;
+    switch(dificultad) {
+        case 1:
+            niveles = leerNiveles("../Text/niveles.txt");
+            break;
+        case 2:
+            niveles = leerNiveles("../Text/niveles2.txt");
+            break;
+        case 3:
+            niveles = leerNiveles("../Text/niveles3.txt");
+            break;
+        default:
+            printf("Dificultad no reconocida. Cargando niveles por defecto...\n");
+            niveles = leerNiveles("../Text/niveles.txt");
+    }
+
+
     ListaEnlazada *deck_general = crearListaEnlazada();
     seleccionarDeck(cartas_disponibles, deck_general, INICIAL_DECK);
     struct Nodo* pila_robo = NULL; // Cambiado de Pila* a struct Nodo*
@@ -26,7 +52,6 @@ int main() {
 
     ListaEnlazada *pila_descarte = crearListaEnlazada();
     ListaEnlazada *mano = crearListaEnlazada();
-    Nivel* niveles = leerNiveles();
     Nivel* nivel_actual = niveles;
     int nuevo_enemigo = 1;
 
