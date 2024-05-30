@@ -1,20 +1,20 @@
-Ataque,5,0,0,-1
-Defensa,0,5,0,-1
-Ultima Sangre,12,0,-5,-1
-Milagro,0,0,0,1
-Resplandor,15,0,0,-2
-Desvio,0,12,0,-2
-Rebote,5,5,0,-1
-Furia,8,3,0,-2
-Escudo Divino,0,10,0,-2
-Bendicion,0,5,10,-3
-Contraataque,6,0,0,-2
-Curacion,0,0,20,-3
-Fuego Sagrado,10,0,0,-3
-Meditacion,0,0,0,3
-Fuerza Divina,7,7,0,-2
-Escudo de Fuego,0,8,0,-2
-Curacion Mayor,0,0,30,-4
-Fuego Infernal,15,0,0,-4
-Meditacion Profunda,0,0,0,5
-Furia de Batalla,10,5,0,-3
+Ataque,5,0,0,-1,10
+Defensa,0,5,0,-1,10
+Ultima Sangre,12,0,-5,-1,25
+Milagro,0,0,0,1,25
+Resplandor,15,0,0,-2,30
+Desvio,0,12,0,-2,30
+Rebote,5,5,0,-1,15
+Furia,8,3,0,-2,17
+Escudo Divino,0,10,0,-2,25
+Bendicion,0,5,10,-3,30
+Contraataque,6,0,0,-2,25
+Curacion,0,0,20,-3,20
+Fuego Sagrado,10,0,0,-3,25
+Meditacion,0,0,0,3,30
+Fuerza Divina,7,7,0,-2,25
+Escudo de Fuego,0,8,0,-2,25
+Curacion Mayor,0,0,30,-4,30
+Fuego Infernal,15,0,0,-4,35
+Meditacion Profunda,0,0,0,5,35
+Furia de Batalla,10,5,0,-3,30
