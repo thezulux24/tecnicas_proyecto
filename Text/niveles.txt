@@ -1,5 +1,5 @@
+combate,Kratos,5
 descanso
-combate,Kratos,20
 combate,Poseidon,70
 tienda
 combate,Zeus,200

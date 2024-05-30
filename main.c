@@ -56,25 +56,45 @@ int main() {
             robarCartas(&pila_robo, mano, pila_descarte); // Ahora pasamos la dirección de pila_robo
             vaciarListaDescarte(pila_descarte);
 
+
             if (jugador.personaje.vida_actual <= 0) {
                 printf("HAS PERDIDO\n");
                 flagJuego = 0;
             }
-            else if (enemigo.personaje.vida_actual <= 0){
-                printf("HAS  GANADO, SELECIONA UNA DE LAS 3 CARTAS\n");
-                Carta *cartas3 = seleccionarTresCartasAleatorias(cartas_disponibles, deck_general);
-                printf("Cartas a seleccionar:\n");
-                for (int i = 0; i < 3; i++) {
-                    printf("%s (AT: %d, DF: %d, Vida: %d, Energia: %d)\n", cartas3[i].nombre,
-                           cartas3[i].ataque, cartas3[i].defensa,
-                           cartas3[i].vida, cartas3[i].energia);
+            else if (enemigo.personaje.vida_actual <= 0) {
+
+                if (jugador.nivel == 10) {
+                    printf("HAS GANADO EL JUEGO\n");
+                    flagJuego = 0;
                 }
-                scanf("%d", &seleccionCarta);
-                agregarAlFinal(deck_general, cartas3[seleccionCarta-1]);
-                printf("Se ha agregado %s al deck\n", cartas3[seleccionCarta-1].nombre);
-                jugador.nivel++;
-                nivel_actual = nivel_actual->siguiente;
-                nuevo_enemigo = 1;
+                else {
+                    int pasar = 0;
+                    printf("HAS  GANADO, SELECIONA UNA DE LAS 3 CARTAS\n");
+                    Carta *cartas3 = seleccionarTresCartasAleatorias(cartas_disponibles, deck_general);
+                    printf("Cartas a seleccionar:\n");
+                    for (int i = 0; i < 3; i++) {
+                        printf("%s (AT: %d, DF: %d, Vida: %d, Energia: %d)\n", cartas3[i].nombre,
+                               cartas3[i].ataque, cartas3[i].defensa,
+                               cartas3[i].vida, cartas3[i].energia);
+                    }
+                    while(pasar == 0) {
+                        scanf("%d", &seleccionCarta);
+                        if (seleccionCarta < 1 || seleccionCarta > 3) {
+                            printf("Selecciona una carta válida\n");
+                        }
+                        else {
+                            agregarAlFinal(deck_general, cartas3[seleccionCarta - 1]);
+                            printf("Se ha agregado %s al deck\n", cartas3[seleccionCarta - 1].nombre);
+                            jugador.nivel++;
+                            nivel_actual = nivel_actual->siguiente;
+                            nuevo_enemigo = 1;
+                            jugador.oro += (rand() % 11) + 10;
+                            pasar = 1;
+                        }
+
+
+                    }
+                }
             }
 
         }
